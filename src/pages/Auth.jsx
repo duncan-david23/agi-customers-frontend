@@ -13,6 +13,7 @@ import {
   ArrowRightIcon
 } from '@heroicons/react/24/outline';
 import asosIcon from '../assets/asosglobal_logo.png'
+import { useNavigate } from 'react-router-dom';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -26,6 +27,8 @@ const AuthPage = () => {
     referralCode: '',
     agreeTerms: false
   });
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -49,6 +52,7 @@ const AuthPage = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center justify-center gap-[4px] mb-8"
+          onClick={()=> navigate('/')}
         >
           <div className="w-10 h-10 flex items-center justify-center">
             <img src={asosIcon} alt="asosglobal icon" />
