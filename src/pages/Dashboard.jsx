@@ -45,35 +45,42 @@ const Dashboard = () => {
       {/* Cards Grid */}
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8'>
         {/* Account Balance Card */}
-        <div className='bg-blue-500 rounded-2xl shadow-sm border border-gray-100 p-6 '>
-          <div className='flex items-center justify-between mb-4'>
-            <h2 className='text-lg font-semibold text-gray-900 text-white'>Account Balance</h2>
-            <div className='w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center'>
-              <span className='text-blue-600 font-bold '>$</span>
-            </div>
-          </div>
-          
-          <div className='mb-4'>
-            <p className='text-3xl text-white  font-bold '>
-              {formatCurrency(accountData.totalBalance)}
-            </p>
-          </div>
+       <div className='bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl shadow-2xl p-6 relative overflow-hidden border-t border-l border-r border-b-2 border-t-blue-400 border-b-blue-300'>
+  {/* Metallic Shine */}
+  <div className='absolute inset-0 bg-gradient-to-b from-white/15 via-transparent to-blue-900/30'></div>
+  
+  {/* Corner Accents */}
+  <div className='absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-blue-300'></div>
+  <div className='absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-blue-300'></div>
 
-          <div className='space-y-3'>
-            <div className='flex justify-between items-center'>
-              <span className='text-white'>Capital Invested</span>
-              <span className='font-medium text-white'>
-                {formatCurrency(accountData.capital)}
-              </span>
-            </div>
-            <div className='flex justify-between items-center'>
-              <span className='text-white'>Commission Earned</span>
-              <span className='font-medium text-green-300'>
-                +{formatCurrency(accountData.commissionEarned)}
-              </span>
-            </div>
-          </div>
-        </div>
+  <div className='flex items-center justify-between mb-6 relative z-10'>
+    <h2 className='text-lg font-semibold text-white'>Account Balance</h2>
+    <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-inner'>
+      <span className='text-blue-600 font-bold text-lg'>$</span>
+    </div>
+  </div>
+  
+  <div className='mb-6 relative z-10'>
+    <p className='text-4xl font-bold text-white tracking-tight'>
+      {formatCurrency(accountData.totalBalance)}
+    </p>
+  </div>
+
+  <div className='space-y-4 relative z-10'>
+    <div className='flex justify-between items-center'>
+      <span className='text-blue-200'>Capital Invested</span>
+      <span className='font-semibold text-white'>
+        {formatCurrency(accountData.capital)}
+      </span>
+    </div>
+    <div className='flex justify-between items-center'>
+      <span className='text-blue-200'>Commission Earned</span>
+      <span className='font-semibold text-green-300'>
+        +{formatCurrency(accountData.commissionEarned)}
+      </span>
+    </div>
+  </div>
+</div>
 
         {/* Total Commission Card */}
        <div className='bg-gradient-to-br from-purple-600 via-purple-500 to-pink-500 rounded-2xl shadow-lg p-6 text-white'>
