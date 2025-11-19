@@ -166,7 +166,7 @@ const Home = () => {
                 className="border border-gray-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
                 onClick={()=> navigate('/auth')}
               >
-                Get $5 Bonus
+                Get ₵56 Bonus
               </motion.button>
             </div>
 
@@ -401,7 +401,7 @@ const Home = () => {
                 </div>
                 <div className="flex justify-between">
                   <span>Minimum Withdrawal:</span>
-                  <span className="font-semibold">₵350</span>
+                  <span className="font-semibold">₵165</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Withdrawal Fee:</span>
@@ -432,7 +432,7 @@ const Home = () => {
                   <div className="text-sm text-gray-400">Daily team trading bonus</div>
                 </div> */}
                 <div className="bg-slate-800/50 rounded-xl p-4">
-                  <div className="text-2xl font-bold text-green-400">$5</div>
+                  <div className="text-2xl font-bold text-green-400">₵56</div>
                   <div className="text-sm text-gray-400">Welcome bonus after registration</div>
                 </div>
               </div>
@@ -458,7 +458,7 @@ const Home = () => {
             Ready to Start Your <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Wealth Journey</span>?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join ASOS Global today and get $5 welcome bonus.
+            Join ASOS Global today and get ₵56 welcome bonus.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <motion.button

@@ -9,4 +9,8 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+   server: {
+    host: '0.0.0.0', // 👈 makes the dev server accessible to other devices
+    port: 5173,       // or any port you prefer
+  },
 })
