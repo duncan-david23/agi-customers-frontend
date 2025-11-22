@@ -112,7 +112,7 @@ const Home = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-2 md:text-md text-sm rounded-full font-semibold hover:shadow-lg hover:shadow-blue-500/25 transition-all"
-            onClick={()=> navigate('/auth')}
+            onClick={()=> navigate('/register')}
           >
             Get Started
           </motion.button>
@@ -154,7 +154,7 @@ const Home = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-gradient-to-r from-blue-600 to-cyan-500 px-8 py-4 rounded-full font-semibold text-lg flex items-center justify-center space-x-2 hover:shadow-lg hover:shadow-blue-500/25 transition-all"
-                onClick={()=> navigate('/auth')}
+                onClick={()=> navigate('/register')}
               >
                 <span>Start Investing</span>
                 <PlayIcon className="w-5 h-5" />
@@ -164,7 +164,7 @@ const Home = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="border border-gray-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
-                onClick={()=> navigate('/auth')}
+                onClick={()=> navigate('/register')}
               >
                 Get ₵56 Bonus
               </motion.button>
@@ -465,7 +465,7 @@ const Home = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-gradient-to-r from-blue-600 to-cyan-500 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-blue-500/25 transition-all"
-              onClick={()=> navigate('/auth')}
+              onClick={()=> navigate('/register')}
            >
               Register Now
             </motion.button>

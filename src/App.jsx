@@ -5,21 +5,24 @@ import Dashboard from './pages/Dashboard'
 import Settings from './pages/Settings'
 import Transactions from './pages/Transactions'
 import Tasks from './pages/Tasks'
-import AuthPage from './pages/Auth'
+import Register from './pages/Register'
+import Login from './pages/Login'
 import { useLocation } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
+import AuthWrapper from './components/AuthWrapper'
 
 const App = () => {
 
 
 const location = useLocation()
-  const isAuthPage = ['/auth', '/'].includes(location.pathname)
+  const isAuthPage = ['/login', '/register', '/'].includes(location.pathname)
 
   if (isAuthPage) {
     return (
       <Routes>
         <Route path='/' element={<Home/>} />
-        <Route path='/auth' element={<AuthPage/>} />
+        <Route path='/login' element={<Login/>} />
+        <Route path='/register' element={<Register/>} />
       </Routes>
     )
   }
@@ -32,11 +35,27 @@ const location = useLocation()
         <Sidebar/>
       <Routes>
           
-          <Route path='/dashboard' element={<Dashboard/>} />
-          <Route path='/transactions' element={<Transactions/>} />
-          <Route path='/tasks' element={<Tasks/>} />
-          <Route path='/settings' element={<Settings/>} />
-        
+          <Route path='/dashboard' element={
+            <AuthWrapper>
+              <Dashboard/>
+            </AuthWrapper>
+          } />
+          <Route path='/transactions' element={
+            <AuthWrapper>
+              <Transactions/>
+            </AuthWrapper>
+          } />
+          <Route path='/tasks' element={
+            <AuthWrapper>
+              <Tasks/>
+            </AuthWrapper>
+          } />
+          <Route path='/settings' element={
+            <AuthWrapper>
+              <Settings/>
+            </AuthWrapper>
+          } />
+
       </Routes>
       
       </div>

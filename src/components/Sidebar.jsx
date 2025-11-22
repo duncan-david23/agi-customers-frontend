@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-// import { supabase } from '../utils/supabase'
+import { supabase } from '../utils/supabase.js'
 // import { useAppContext } from '../contexts/AppContext'
 
 const Sidebar = () => {
@@ -47,17 +47,17 @@ const Sidebar = () => {
 
 
      const handleSignOut = async () => {
-        // const { error } = await supabase.auth.signOut();
-        // if (error) {
-        //     console.error('Error signing out:', error.message);
-        // } else {
-        //     console.log('Signed out successfully');
-        //     window.location.href = '/login'; 
-        //     localStorage.removeItem('accessToken');
-        //     localStorage.removeItem('userId');
-        //     localStorage.removeItem('userEmail');
-        //     localStorage.removeItem('business_name');
-        // }
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            console.error('Error signing out:', error.message);
+        } else {
+            console.log('Signed out successfully');
+            window.location.href = '/login'; 
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('business_name');
+        }
     };
 
 
@@ -66,7 +66,7 @@ const Sidebar = () => {
       {/* Mobile Toggle Button - Only shows when sidebar is closed */}
       {!isMobileOpen && (
         <button 
-          className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-gray-100 rounded-full shadow-md"
+          className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-gray-100  shadow-blue-600 rounded-full shadow-md"
           onClick={() => setIsMobileOpen(true)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
