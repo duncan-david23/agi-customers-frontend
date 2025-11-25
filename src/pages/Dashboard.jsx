@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+import { supabase } from '../utils/supabase.js';
 
 const Dashboard = () => {
   // Sample data - you can replace with actual data from your state/props
@@ -31,14 +33,47 @@ const Dashboard = () => {
     });
   };
 
+
+
+  const [userProfile, setUserProfile] = useState(null);
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      const accessToken = session?.access_token
+           
+
+      const profileResponse = await axios.get(`http://localhost:3001/api/users/profile`, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+
+      const result = profileResponse.data;
+      const totalAmount = result.profile.wallet + result.profile.withdrawable_commission;
+      setTotalAmount(totalAmount);
+
+
+      if (profileResponse.status === 200) {
+        setUserProfile(result.profile);
+      } else {
+        console.error("Error fetching user profile:", profileResponse.data.error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+
+
+
   return (
     <div className='h-screen w-full bg-gray-50 px-4 pt-20 overflow-scroll '>
       {/* Header */}
       <div className='mb-6'>
-        <h1 className='text-2xl font-thin text-gray-900'>Wlecome back, John Doe</h1>
-        <div className='flex flex-col justify-center text-sm text-gray-500 gap-[2px]'>
-          <p>Ref No:</p>
-          <p className='border border-blue-600 text-gray-500 py-[5px] px-[15px] rounded-lg w-fit mt-[6px]'>ACC-JD45566H4</p>
+        <h1 className='text-xl font-thin text-gray-900'>Wlecome back, <span className='font-bold text-blue-600 italic'>{userProfile?.user_name}</span></h1>
+        <div className='flex items-center text-sm text-gray-500 gap-[2px]'>
+          <p>A/C No:</p>
+          <p className='border border-blue-600 text-gray-500 py-[5px] px-[15px] rounded-lg w-fit mt-[6px]'>{userProfile?.account_number}</p>
         </div>
       </div>
 
@@ -62,7 +97,7 @@ const Dashboard = () => {
   
   <div className='mb-6 relative z-10'>
     <p className='text-4xl font-bold text-white tracking-tight'>
-      {formatCurrency(accountData.totalBalance)}
+      {formatCurrency(totalAmount)}
     </p>
   </div>
 
@@ -70,13 +105,13 @@ const Dashboard = () => {
     <div className='flex justify-between items-center'>
       <span className='text-blue-200'>Capital Invested</span>
       <span className='font-semibold text-white'>
-        {formatCurrency(accountData.capital)}
+        {formatCurrency(userProfile?.wallet)}
       </span>
     </div>
     <div className='flex justify-between items-center'>
       <span className='text-blue-200'>Commission Earned</span>
       <span className='font-semibold text-green-300'>
-        +{formatCurrency(accountData.commissionEarned)}
+        +{formatCurrency(userProfile?.withdrawable_commission)}
       </span>
     </div>
   </div>
@@ -93,7 +128,7 @@ const Dashboard = () => {
           
           <div className='mb-2'>
             <p className='text-3xl font-bold'>
-              {formatCurrency(accountData.commissionEarned)}
+              {formatCurrency(userProfile?.withdrawable_commission)}
             </p>
           </div>
 
@@ -104,7 +139,7 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Transactions */}
-      <div className='bg-white rounded-2xl shadow-sm border border-gray-100 p-6'>
+      {/* <div className='bg-white rounded-2xl shadow-sm border border-gray-100 p-6'>
         <div className='flex items-center justify-between mb-6'>
           <h2 className='text-lg font-semibold text-gray-900'>Recent Transactions</h2>
           <button className='text-blue-600 text-sm font-medium hover:text-blue-700'>
@@ -151,7 +186,7 @@ const Dashboard = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

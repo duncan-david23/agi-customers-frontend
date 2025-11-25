@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
+import { supabase } from '../utils/supabase.js';
 
 const Transactions = () => {
   const [activeTab, setActiveTab] = useState('withdrawal');
@@ -36,25 +39,62 @@ const Transactions = () => {
   };
 
   const handleWithdrawalSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+  e.preventDefault();
+  setIsSubmitting(true);
+
+  try {
+    // 1️⃣ Get user token  
+    const { data: { session } } = await supabase.auth.getSession();
+    const accessToken = session?.access_token;
+
+    if (!accessToken) {
+      return toast.error("Authentication error. Please log in again.");
+    }
+
+    const response = await axios.post(
+      "http://localhost:3001/api/users/withdrawal-request",
+      {
+        amount: parseFloat(withdrawalData.amount),
+        method: withdrawalData.paymentMethod,
+        recipientDetails: withdrawalData.recipientDetails,
+        referenceNumber: withdrawalData.referenceNumber,
+        fullName: withdrawalData.fullName
+      },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      }
+    );
+
+    toast.success(response.data.message);
+
     // Reset form
     setWithdrawalData({
       fullName: '',
-      appAccountNumber: '',
       amount: '',
       paymentMethod: '',
-      recipientDetails: ''
+      recipientDetails: '',
+      referenceNumber: ''
     });
+
+  } catch (error) {
+    console.error(error);
+
+    if (error.response && error.response.status === 403) {
+      toast.error(error.response.data.message || "Insufficient funds for withdrawal");
+    } else {
+      toast.error("Failed to submit withdrawal request");
+    }
+  } finally {
     setIsSubmitting(false);
-    
-    // Show success message (you can replace this with a toast)
-    alert('Withdrawal request submitted successfully!');
-  };
+  }
+};
+
+
+
+
+
+
+
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
@@ -143,7 +183,7 @@ const Transactions = () => {
                     {/* Reference Number */}
                     <div className="text-left">
                       <label htmlFor="referenceNumber" className="block text-sm font-medium text-gray-700 mb-2">
-                        Your Reference Number
+                        Reference No. (use your app A/C No. as reference)
                       </label>
                       <input
                         type="text"
@@ -152,7 +192,7 @@ const Transactions = () => {
                         value={withdrawalData.referenceNumber}
                         onChange={handleWithdrawalChange}
                         required
-                        className="w-full px-3 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50"
+                        className="w-full px-3 py-3 uppercase border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50"
                         placeholder="ACC-123456"
                       />
                     </div>
@@ -221,7 +261,7 @@ const Transactions = () => {
                           value={withdrawalData.amount}
                           onChange={handleWithdrawalChange}
                           required
-                          min="10"
+                          min="165"
                           step="0.01"
                           className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50"
                           placeholder="0.00"

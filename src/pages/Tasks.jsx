@@ -1,95 +1,125 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { supabase } from '../utils/supabase.js';
+import toast, { Toaster } from 'react-hot-toast';
 
-// Sample products data in Ghana Cedis
-const productsData = [
-  { 
-    id: 1,
-    product_name: 'Premium Sweatshirt',
-    image: 'https://images.asos-media.com/products/asos-design-sweatshirt-with-print-in-stone/207543677-1-stone?$n_640w$&wid=513&fit=constrain',
-    price: 240
-  },
-  { 
-    id: 2,
-    product_name: 'Designer Jeans',
-    image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=500&h=500&fit=crop',
-    price: 180
-  },
-  { 
-    id: 3,
-    product_name: 'Leather Jacket',
-    image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&h=500&fit=crop',
-    price: 420
-  },
-  { 
-    id: 4,
-    product_name: 'Running Sneakers',
-    image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500&h=500&fit=crop',
-    price: 140
-  },
-  { 
-    id: 5,
-    product_name: 'Summer Dress',
-    image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&h=500&fit=crop',
-    price: 220
-  },
-  { 
-    id: 6,
-    product_name: 'Winter Coat',
-    image: 'https://images.unsplash.com/photo-1556906781-2a6f8f753ead?w=500&h=500&fit=crop',
-    price: 340
-  },
-  { 
-    id: 7,
-    product_name: 'Sports T-shirt',
-    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=500&fit=crop',
-    price: 95
-  },
-  { 
-    id: 8,
-    product_name: 'Designer Handbag',
-    image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=500&fit=crop',
-    price: 500
-  },
-  { 
-    id: 9,
-    product_name: 'Casual Shorts',
-    image: 'https://images.unsplash.com/photo-1506629905607-e48b0e67d879?w=500&h=500&fit=crop',
-    price: 110
-  },
-  { 
-    id: 10,
-    product_name: 'Formal Shirt',
-    image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&h=500&fit=crop',
-    price: 130
-  }
-];
+
 
 const Tasks = () => {
   const [purchasedItems, setPurchasedItems] = useState([]);
   const [tasksCompleted, setTasksCompleted] = useState(0);
   const [commissionEarned, setCommissionEarned] = useState(0);
-  const [userCapital, setUserCapital] = useState(1000);
+  const [userTasks, setUserTasks] = useState([]);
+  const [userCapital, setUserCapital] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showProducts, setShowProducts] = useState(true);
 
   const totalTasks = 10;
   const dailyCommissionRate = 0.03;
 
-  const handleBuy = (product) => {
-    if (purchasedItems.length < totalTasks && !purchasedItems.find(item => item.id === product.id)) {
-      setPurchasedItems(prev => [...prev, product]);
-      setTasksCompleted(prev => prev + 1);
-    }
-  };
+  const handleBuy = async (userTasks) => {
+  try {
+    // 1️⃣ Prevent buying more than allowed or duplicate buys
+    const alreadyBought = purchasedItems.find(item => item.id === userTasks.product_id);
 
-  const handleSellAll = () => {
-    if (purchasedItems.length === totalTasks) {
-      const commission = userCapital * dailyCommissionRate;
-      setCommissionEarned(commission);
-      setShowSuccess(true);
-      setShowProducts(false);
+    if (purchasedItems.length >= totalTasks) {
+      return toast.error("You’ve reached your daily limit.");
     }
-  };
+
+    if (alreadyBought) {
+      return toast.error("You have already purchased this item.");
+    }
+
+    // 2️⃣ Update frontend state immediately
+    setPurchasedItems(prev => [...prev, userTasks]);
+    setTasksCompleted(prev => prev + 1);
+
+    // 3️⃣ Get Supabase session token
+    const { data: { session } } = await supabase.auth.getSession();
+    const accessToken = session?.access_token;
+
+    if (!accessToken) {
+      return toast.error("You must be logged in to continue.");
+    }
+
+    // 4️⃣ Send request to backend to store user task
+    await axios.post(
+      "http://localhost:3001/api/users/add-tasks",
+      {
+        product_id: userTasks.id,
+        product_name: userTasks.product_name,
+        product_image: userTasks.product_image,
+        product_price: userTasks.product_price
+      },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      }
+    );
+
+    
+
+    toast.success("Product added to your tasks.");
+  } catch (error) {
+    console.error("Buy error:", error);
+    toast.error("Failed to add product. Try again.");
+  }
+};
+
+
+
+
+
+
+
+
+const handleSellAll = async () => {
+  try {
+    // Ensure user has completed all tasks
+    if (purchasedItems.length !== totalTasks) {
+      return alert("You must purchase all items before selling.");
+    }
+
+    // 1️⃣ Get user token  
+    const { data: { session } } = await supabase.auth.getSession();
+    const accessToken = session?.access_token;
+
+    if (!accessToken) {
+      return alert("Authentication error. Please log in again.");
+    }
+
+    // 2️⃣ Call backend to delete all tasks
+    const response = await axios.delete(
+      "http://localhost:3001/api/users/sell-all-tasks",
+      {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      }
+    );
+
+    console.log("Sell All Response:", response.data);
+
+    // 3️⃣ Calculate commission earned
+    const commission = userCapital * dailyCommissionRate;
+
+    await axios.put(
+      "http://localhost:3001/api/users/update-commission",
+      { commissionAmount: commission },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      }
+    );
+
+    // 4️⃣ Update UI after success
+    setCommissionEarned(commission);
+    setPurchasedItems([]); // Clear purchased items
+    setShowSuccess(true);
+    setShowProducts(false);
+
+  } catch (error) {
+    console.error("Sell all error:", error);
+    alert("An error occurred while selling your tasks.");
+  }
+};
+
 
   const handleCloseSuccess = () => {
     setShowSuccess(false);
@@ -107,6 +137,79 @@ const Tasks = () => {
       currency: 'GHS'
     }).format(amount);
   };
+
+
+
+   useEffect(() => {
+    const fetchTasks = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      const accessToken = session?.access_token
+
+      const tasksResponse = await axios.get(`http://localhost:3001/api/users/tasks`, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+
+      const result = tasksResponse.data;
+      
+
+      if (tasksResponse.status === 200) {
+        setUserTasks(result.tasks);
+      } else {
+        console.error("Error fetching user tasks:", tasksResponse.data.error);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
+
+
+   useEffect(() => {
+    const fetchUserTasks = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      const accessToken = session?.access_token
+
+      const tasksResponse = await axios.get(`http://localhost:3001/api/users/user-tasks`, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+
+      const result = tasksResponse.data;
+      
+
+      if (result.tasks.length === 0) {
+        // setUserTasks(result.tasks);
+      } else {
+        console.error("Error fetching user tasks:", tasksResponse.data.error);
+      }
+    };
+
+    fetchUserTasks();
+  }, []);
+
+
+
+
+  // fetch user profile to get capital amount 
+   useEffect(() => {
+    const fetchUserCapital = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      const accessToken = session?.access_token
+           
+
+      const profileResponse = await axios.get(`http://localhost:3001/api/users/profile`, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+
+      const result = profileResponse.data;
+      const profile = result.profile;
+      setUserCapital(profile.wallet);
+    };
+
+    fetchUserCapital();
+  }, []);
+
+
+
 
   return (
     <div className="h-screen bg-gray-50 px-4 pt-20 pb-8 overflow-scroll w-full">
@@ -183,7 +286,7 @@ const Tasks = () => {
             {purchasedItems.map(item => (
               <div key={item.id} className="w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                 <img 
-                  src={item.image} 
+                  src={item.product_image} 
                   alt={item.product_name}
                   className="w-full h-full object-cover"
                 />
@@ -196,7 +299,7 @@ const Tasks = () => {
       {/* Products Grid - ASOS Style Cards */}
       {showProducts ? (
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-          {productsData.map(product => (
+          {userTasks.map(product => (
             <div 
               key={product.id}
               className={`bg-white rounded-lg shadow-sm border border-gray-200 transition-all duration-300 hover:shadow-md hover:border-gray-300 ${
@@ -208,7 +311,7 @@ const Tasks = () => {
               {/* Product Image Container */}
               <div className="relative bg-white rounded-t-lg overflow-hidden">
                 <img 
-                  src={product.image} 
+                  src={product.product_image} 
                   alt={product.product_name}
                   className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
                 />
@@ -230,7 +333,7 @@ const Tasks = () => {
                 </h3>
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-lg font-bold text-gray-900">
-                    {formatCurrency(product.price)}
+                    {formatCurrency(product.product_price)}
                   </span>
                 </div>
 

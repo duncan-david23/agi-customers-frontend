@@ -10,6 +10,7 @@ import Login from './pages/Login'
 import { useLocation } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
 import AuthWrapper from './components/AuthWrapper'
+import toast, { Toaster } from 'react-hot-toast';
 
 const App = () => {
 
@@ -30,8 +31,10 @@ const location = useLocation()
 
 
   return (
-   
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="flex">
+        
         <Sidebar/>
       <Routes>
           
@@ -60,7 +63,7 @@ const location = useLocation()
       
       </div>
 
-    
+    </>
   )
 }
 

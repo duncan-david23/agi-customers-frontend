@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { motion } from 'framer-motion';
 import { 
   EyeIcon,
@@ -19,6 +20,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState(null);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -42,8 +44,6 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle registration logic here
-    console.log('Customer registration submitted:', formData);
-
 
     if(formData.password !== formData.confirmPassword){
             setMsg('Passwords do not match')
@@ -66,7 +66,18 @@ const Register = () => {
 
         console.log(data.user);
         setMsg('User has been successfully registered');
-        console.log(formData.fullName, formData.phone, formData.referralCode, formData.email);
+        console.log(data.user.id,  data.user.email, formData.fullName, formData.referralCode);
+
+      const { data: { session } } = await supabase.auth.getSession()
+      const accessToken = session?.access_token
+     
+
+           const response = await axios.post(`http://localhost:3001/api/users/create-profile`,{userId:data.user.id, fullName:formData.fullName, email:formData.email, referralCode:formData.referralCode}, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
+          const result = response.data;
+          console.log('User profile created:', result);
+
        
   
   
@@ -79,6 +90,9 @@ const Register = () => {
       setLoading(false);
     }
   };
+
+
+
 
 
 
@@ -142,7 +156,7 @@ const Register = () => {
                 </div>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Phone Number
                 </label>
@@ -158,7 +172,7 @@ const Register = () => {
                     required
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -232,7 +246,7 @@ const Register = () => {
                     name="referralCode"
                     value={formData.referralCode}
                     onChange={handleInputChange}
-                    className="w-full bg-gray-50 border border-gray-300 rounded-xl pl-10 pr-4 py-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                    className="w-full bg-gray-50 border uppercase border-gray-300 rounded-xl pl-10 pr-4 py-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                     placeholder="Enter referral code"
                   />
                 </div>
