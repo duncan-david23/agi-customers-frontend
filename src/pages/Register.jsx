@@ -72,7 +72,7 @@ const Register = () => {
       const accessToken = session?.access_token
      
 
-           const response = await axios.post(`http://localhost:3001/api/users/create-profile`,{userId:data.user.id, fullName:formData.fullName, email:formData.email, referralCode:formData.referralCode}, {
+           const response = await axios.post(`https://agi-backend.onrender.com/api/users/create-profile`,{userId:data.user.id, fullName:formData.fullName, email:formData.email, referralCode:formData.referralCode}, {
             headers: { Authorization: `Bearer ${accessToken}` },
           });
           const result = response.data;
