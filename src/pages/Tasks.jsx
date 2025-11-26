@@ -14,6 +14,7 @@ const Tasks = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showProducts, setShowProducts] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [sellLoading, setSellLoading] = useState(false);
 
   const totalTasks = 10;
   const dailyCommissionRate = 0.03;
@@ -62,6 +63,7 @@ const handleSellAll = async () => {
     // 1️⃣ Get user token  
     const { data: { session } } = await supabase.auth.getSession();
     const accessToken = session?.access_token;
+    setSellLoading(true);
 
     if (!accessToken) {
       return alert("Authentication error. Please log in again.");
@@ -69,19 +71,18 @@ const handleSellAll = async () => {
 
     // 2️⃣ Call backend to delete all tasks
     const response = await axios.delete(
-      "http://localhost:3001/api/users/sell-all-tasks",
+      "https://agi-backend.onrender.com/api/users/sell-all-tasks",
       {
         headers: { Authorization: `Bearer ${accessToken}` }
       }
     );
 
-    console.log("Sell All Response:", response.data);
 
     // 3️⃣ Calculate commission earned
     const commission = userCapital * dailyCommissionRate;
 
     await axios.put(
-      "http://localhost:3001/api/users/update-commission",
+      "https://agi-backend.onrender.com/api/users/update-commission",
       { commissionAmount: commission },
       {
         headers: { Authorization: `Bearer ${accessToken}` }
@@ -97,6 +98,8 @@ const handleSellAll = async () => {
   } catch (error) {
     console.error("Sell all error:", error);
     alert("An error occurred while selling your tasks.");
+  } finally {
+    setSellLoading(false);
   }
 };
 
@@ -127,7 +130,7 @@ const handleSellAll = async () => {
       try {
         setLoading(true);
         
-         const tasksResponse = await axios.get(`http://localhost:3001/api/users/tasks`, {
+         const tasksResponse = await axios.get(`https://agi-backend.onrender.com/api/users/tasks`, {
         headers: { Authorization: `Bearer ${accessToken}` }
       });
 
@@ -161,7 +164,7 @@ const handleSellAll = async () => {
       const accessToken = session?.access_token
            
 
-      const profileResponse = await axios.get(`http://localhost:3001/api/users/profile`, {
+      const profileResponse = await axios.get(`https://agi-backend.onrender.com/api/users/profile`, {
         headers: { Authorization: `Bearer ${accessToken}` }
       });
 
@@ -233,8 +236,12 @@ const handleSellAll = async () => {
           <div className="flex justify-center mb-6">
             <button
               onClick={handleSellAll}
+              disabled={sellLoading}
               className="bg-black hover:bg-gray-800 text-white font-semibold py-4 px-8 rounded-lg shadow-sm transform hover:scale-105 transition-all duration-200 flex items-center space-x-3"
             >
+              {sellLoading ? (
+                <div className="w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : null}
               <span className="text-lg">💎</span>
               <span className="text-lg">SELL ALL & CLAIM COMMISSION</span>
               <span className="text-lg">💰</span>

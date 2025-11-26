@@ -37,14 +37,18 @@ const Dashboard = () => {
 
   const [userProfile, setUserProfile] = useState(null);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      const accessToken = session?.access_token
-           
 
-      const profileResponse = await axios.get(`http://localhost:3001/api/users/profile`, {
+      try {
+         const { data: { session } } = await supabase.auth.getSession()
+      const accessToken = session?.access_token
+
+      setLoading(true);
+
+      const profileResponse = await axios.get(`https://agi-backend.onrender.com/api/users/profile`, {
         headers: { Authorization: `Bearer ${accessToken}` }
       });
 
@@ -52,13 +56,17 @@ const Dashboard = () => {
       const totalAmount = result.profile.wallet + result.profile.withdrawable_commission;
       setTotalAmount(totalAmount);
 
-
       if (profileResponse.status === 200) {
         setUserProfile(result.profile);
       } else {
         console.error("Error fetching user profile:", profileResponse.data.error);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
     fetchUserProfile();
   }, []);
@@ -76,6 +84,10 @@ const Dashboard = () => {
           <p className='border border-blue-600 text-gray-500 py-[5px] px-[15px] rounded-lg w-fit mt-[6px]'>{userProfile?.account_number}</p>
         </div>
       </div>
+      {loading && (<div className="text-center py-12">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Loading user balances...</h3>
+        </div>)}
 
       {/* Cards Grid */}
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8'>

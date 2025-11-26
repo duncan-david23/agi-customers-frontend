@@ -110,9 +110,9 @@ const Sidebar = () => {
             </svg>
           </button>
         </div>
-        
-        {/* <div className='h-px w-full bg-gray-300 mt-5'></div> */}
-        
+
+        <div className='mt-5 mb-5 text-sm'> Join Asos Global Telegram <a href="https://t.me/yourchannel" target='_blank' className='text-blue-500'>@yourchannel</a></div>
+
         {/* Menu Items */}
         <ul className='md:mt-10'>
           {menuItems.map(item => (

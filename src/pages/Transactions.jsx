@@ -52,7 +52,7 @@ const Transactions = () => {
     }
 
     const response = await axios.post(
-      "http://localhost:3001/api/users/withdrawal-request",
+      "https://agi-backend.onrender.com/api/users/withdrawal-request",
       {
         amount: parseFloat(withdrawalData.amount),
         method: withdrawalData.paymentMethod,
