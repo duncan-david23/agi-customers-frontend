@@ -34,29 +34,6 @@ const Tasks = () => {
     setPurchasedItems(prev => [...prev, userTasks]);
     setTasksCompleted(prev => prev + 1);
 
-    // 3️⃣ Get Supabase session token
-    const { data: { session } } = await supabase.auth.getSession();
-    const accessToken = session?.access_token;
-
-    if (!accessToken) {
-      return toast.error("You must be logged in to continue.");
-    }
-
-    // 4️⃣ Send request to backend to store user task
-    await axios.post(
-      "http://localhost:3001/api/users/add-tasks",
-      {
-        product_id: userTasks.id,
-        product_name: userTasks.product_name,
-        product_image: userTasks.product_image,
-        product_price: userTasks.product_price
-      },
-      {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      }
-    );
-
-    
 
     toast.success("Product added to your tasks.");
   } catch (error) {
@@ -76,7 +53,9 @@ const handleSellAll = async () => {
   try {
     // Ensure user has completed all tasks
     if (purchasedItems.length !== totalTasks) {
-      return alert("You must purchase all items before selling.");
+      toast.error("You must complete all tasks before selling.");
+      alert("You must complete all tasks before selling.");
+      return;
     }
 
     // 1️⃣ Get user token  
@@ -164,28 +143,7 @@ const handleSellAll = async () => {
 
 
 
-   useEffect(() => {
-    const fetchUserTasks = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      const accessToken = session?.access_token
-
-      const tasksResponse = await axios.get(`http://localhost:3001/api/users/user-tasks`, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      });
-
-      const result = tasksResponse.data;
-      
-
-      if (result.tasks.length === 0) {
-        // setUserTasks(result.tasks);
-      } else {
-        console.error("Error fetching user tasks:", tasksResponse.data.error);
-      }
-    };
-
-    fetchUserTasks();
-  }, []);
-
+  
 
 
 
@@ -386,7 +344,7 @@ const handleSellAll = async () => {
 
       {/* Success Modal - Clean ASOS Style */}
       {showSuccess && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+        <div className="fixed flex items-center justify-center z-50 bg-black bg-opacity-80 inset-0">
           <div className="bg-white rounded-lg shadow-lg p-8 text-center max-w-sm mx-4 border border-gray-200">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
