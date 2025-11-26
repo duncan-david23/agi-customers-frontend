@@ -13,6 +13,7 @@ const Tasks = () => {
   const [userCapital, setUserCapital] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showProducts, setShowProducts] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const totalTasks = 10;
   const dailyCommissionRate = 0.03;
@@ -123,18 +124,24 @@ const handleSellAll = async () => {
     const fetchTasks = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       const accessToken = session?.access_token
-
-      const tasksResponse = await axios.get(`http://localhost:3001/api/users/tasks`, {
+      try {
+        setLoading(true);
+        
+         const tasksResponse = await axios.get(`http://localhost:3001/api/users/tasks`, {
         headers: { Authorization: `Bearer ${accessToken}` }
       });
 
-      const result = tasksResponse.data;
-      
+        const result = tasksResponse.data;
 
-      if (tasksResponse.status === 200) {
-        setUserTasks(result.tasks);
-      } else {
-        console.error("Error fetching user tasks:", tasksResponse.data.error);
+        if (tasksResponse.status === 200) {
+          setUserTasks(result.tasks);
+        } else {
+          console.error("Error fetching user tasks:", tasksResponse.data.error);
+        }
+      } catch (error) {
+        console.error("Unexpected error fetching user tasks:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -237,7 +244,12 @@ const handleSellAll = async () => {
       </div>
 
       {/* Purchased Items Preview */}
+        {loading && <div className="text-center mx-auto py-12">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Loading tasks...</h3>
+        </div>}
       {purchasedItems.length > 0 && showProducts && (
+        
         <div className="mb-8">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Collection ({purchasedItems.length}/10)</h3>
           <div className="flex flex-wrap gap-2">
@@ -257,6 +269,7 @@ const handleSellAll = async () => {
       {/* Products Grid - ASOS Style Cards */}
       {showProducts ? (
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        
           {userTasks.map(product => (
             <div 
               key={product.id}
