@@ -109,7 +109,7 @@ const Dashboard = () => {
   
   <div className='mb-6 relative z-10'>
     <p className='text-4xl font-bold text-white tracking-tight'>
-      {formatCurrency(totalAmount)}
+      {formatCurrency(totalAmount) || formatCurrency(0)}
     </p>
   </div>
 
@@ -117,13 +117,13 @@ const Dashboard = () => {
     <div className='flex justify-between items-center'>
       <span className='text-blue-200'>Capital Invested</span>
       <span className='font-semibold text-white'>
-        {formatCurrency(userProfile?.wallet)}
+        {formatCurrency(userProfile?.wallet) || formatCurrency(0)}
       </span>
     </div>
     <div className='flex justify-between items-center'>
       <span className='text-blue-200'>Commission Earned</span>
       <span className='font-semibold text-green-300'>
-        +{formatCurrency(userProfile?.withdrawable_commission)}
+        +{formatCurrency(userProfile?.withdrawable_commission) || formatCurrency(0)}
       </span>
     </div>
   </div>
@@ -140,7 +140,7 @@ const Dashboard = () => {
           
           <div className='mb-2'>
             <p className='text-3xl font-bold'>
-              {formatCurrency(userProfile?.withdrawable_commission)}
+              {formatCurrency(userProfile?.withdrawable_commission) || formatCurrency(0)}
             </p>
           </div>
 
