@@ -78,7 +78,7 @@ const Dashboard = () => {
     <div className='h-screen w-full bg-gray-50 px-4 pt-20 overflow-scroll '>
       {/* Header */}
       <div className='mb-6'>
-        <h1 className='text-xl font-thin text-gray-900'>Wlecome back, <span className='font-bold text-blue-600 italic'>{userProfile?.user_name}</span></h1>
+        <h1 className='text-xl font-thin text-gray-900'>Welcome back, <span className='font-bold text-blue-600 italic'>{userProfile?.user_name}</span></h1>
         <div className='flex items-center text-sm text-gray-500 gap-[2px]'>
           <p>A/C No:</p>
           <p className='border border-blue-600 text-gray-500 py-[5px] px-[15px] rounded-lg w-fit mt-[6px]'>{userProfile?.account_number}</p>
