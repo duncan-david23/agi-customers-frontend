@@ -15,7 +15,7 @@ const ForgotPassword = () => {
 
         setLoading(true);
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: 'https://asosglobalinvest.com/reset-password',
+            redirectTo: 'https://asosglobalinvest/reset-password',
         });
 
         if (error) {

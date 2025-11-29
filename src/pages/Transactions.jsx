@@ -15,12 +15,18 @@ const Transactions = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Company bank details for topup
-  const companyBankDetails = {
-    bankName: 'GCB Bank Ghana',
-    accountName: 'ASOS GLOBAL.',
-    accountNumber: '1234567890123',
-    branch: 'Accra Main Branch'
-  };
+  const companyBankDetails = [{
+    bankName: 'Access bank ',
+    accountName: 'Blebu Victoria',
+    accountNumber: '1038000005486',
+  },
+  {
+    bankName: 'Fidelity bank ',
+    accountName: 'Blebu Victoria',
+    accountNumber: '2400192677419',
+  }
+
+];
 
   // Payment methods
   const paymentMethods = [
@@ -337,52 +343,48 @@ const Transactions = () => {
                   </h3>
                   
                   <div className="space-y-3">
-                    {Object.entries(companyBankDetails).map(([key, value]) => (
-                      <div key={key} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
-                        <span className="text-gray-600 font-medium text-xs capitalize">
-                          {key.replace(/([A-Z])/g, ' $1').trim()}
-                        </span>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-gray-900 font-semibold text-right text-sm">
-                            {value}
-                          </span>
-                          {/* <button
-                            onClick={() => copyToClipboard(value)}
-                            className="text-gray-400 hover:text-blue-600 transition-colors p-1"
-                          >
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                            </svg>
-                          </button> */}
-                        </div>
+                    {companyBankDetails.map((bank, index) => (
+                      <div key={index} className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+                        <p className="text-sm text-gray-700"><span className="font-semibold">Bank:</span> {bank.bankName}</p>
+                        <p className="text-sm text-gray-700"><span className="font-semibold">Account Name:</span> {bank.accountName}</p>
+                        <p className="text-sm text-gray-700"><span className="font-semibold">Account Number:</span> {bank.accountNumber}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Instructions */}
-                <div className="bg-yellow-50 rounded-xl border border-yellow-200 p-4 mb-4 max-w-2xl mx-auto">
-                  <h3 className="font-semibold text-yellow-900 mb-3 flex items-center justify-center text-sm">
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    Important Instructions
-                  </h3>
-                  <ol className="text-xs text-yellow-800 space-y-2 text-left">
-                    <li className="flex items-start">
-                      <span className="font-semibold text-yellow-700 mr-2">1.</span>
-                      Send money to the company account above
-                    </li>
-                    <li className="flex items-start">
-                      <span className="font-semibold text-yellow-700 mr-2">2.</span>
-                      Use your <strong className="text-yellow-900"> app reference number </strong> as reference
-                    </li>
-                    <li className="flex items-start">
-                      <span className="font-semibold text-yellow-700 mr-2">3.</span>
-                      Funds credited within 1-2 hours
-                    </li>
-                  </ol>
-                </div>
+               <div className="bg-yellow-50 rounded-xl border border-yellow-200 p-6 mb-6 mx-4 lg:mx-auto max-w-2xl">
+  <h3 className="font-bold text-yellow-900 mb-4 flex items-center justify-center text-lg md:text-xl">
+    <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z" />
+    </svg>
+    Important Instructions
+  </h3>
+  
+  <ol className="text-base md:text-lg text-yellow-800 space-y-4 text-left">
+    <li className="flex items-start">
+      <span className="font-bold text-yellow-700 text-lg mr-3 min-w-[25px]">1.</span>
+      <span className="pt-0.5">Send money to the company account above</span>
+    </li>
+    
+    <li className="flex items-start">
+      <span className="font-bold text-yellow-700 text-lg mr-3 min-w-[25px]">2.</span>
+      <div className="pt-0.5">
+        Use your 
+        <span className="font-bold mx-2 px-2 py-1 bg-yellow-100 border border-yellow-300 rounded-md text-yellow-900 text-base">
+          App A/C No. (ACCT-XXXXXX)
+        </span> 
+        as reference
+      </div>
+    </li>
+    
+    <li className="flex items-start">
+      <span className="font-bold text-yellow-700 text-lg mr-3 min-w-[25px]">3.</span>
+      <span className="pt-0.5">Funds will be credited within 1-2 hours</span>
+    </li>
+  </ol>
+</div>
 
                 {/* Quick Action Buttons */}
                 {/* <div className="space-y-3 max-w-md mx-auto">
