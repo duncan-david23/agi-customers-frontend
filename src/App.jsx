@@ -11,12 +11,14 @@ import { useLocation } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
 import AuthWrapper from './components/AuthWrapper'
 import toast, { Toaster } from 'react-hot-toast';
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 const App = () => {
 
 
 const location = useLocation()
-  const isAuthPage = ['/login', '/register', '/'].includes(location.pathname)
+  const isAuthPage = ['/login', '/register', '/', '/forgot-password', '/reset-password'].includes(location.pathname)
 
   if (isAuthPage) {
     return (
@@ -24,6 +26,8 @@ const location = useLocation()
         <Route path='/' element={<Home/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/register' element={<Register/>} />
+        <Route path='/forgot-password' element={<ForgotPassword/>} />
+        <Route path='/reset-password' element={<ResetPassword/>} />
       </Routes>
     )
   }
@@ -32,15 +36,15 @@ const location = useLocation()
 
   return (
     <>
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster />
       <div className="flex">
-        
-        <Sidebar/>
-      <Routes>
-          
+
+        <Sidebar />
+        <Routes>
+
           <Route path='/dashboard' element={
             <AuthWrapper>
-              <Dashboard/>
+              <Dashboard />
             </AuthWrapper>
           } />
           <Route path='/transactions' element={

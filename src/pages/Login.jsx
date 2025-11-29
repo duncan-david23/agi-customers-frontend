@@ -144,7 +144,7 @@ const Login = () => {
                 </div>
               </div>
 
-              {/* <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
@@ -157,10 +157,10 @@ const Login = () => {
                     Remember me
                   </label>
                 </div>
-                <a href="#" className="text-sm text-gray-900 hover:text-black font-medium transition-colors">
+                <a href="/forgot-password" className="text-sm text-gray-900 hover:text-black font-medium transition-colors">
                   Forgot password?
                 </a>
-              </div> */}
+              </div>
 
               <motion.button
                 whileHover={{ scale: 1.02 }}
