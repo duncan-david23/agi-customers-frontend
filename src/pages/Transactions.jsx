@@ -24,9 +24,7 @@ const Transactions = () => {
     bankName: 'Fidelity bank ',
     accountName: 'Blebu Victoria',
     accountNumber: '2400192677419',
-  }
-
-];
+  }];
 
   // Payment methods
   const paymentMethods = [
@@ -45,67 +43,76 @@ const Transactions = () => {
   };
 
   const handleWithdrawalSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
+    e.preventDefault();
+    setIsSubmitting(true);
 
-  try {
-    // 1️⃣ Get user token  
-    const { data: { session } } = await supabase.auth.getSession();
-    const accessToken = session?.access_token;
+    try {
+      // 1️⃣ Get user token  
+      const { data: { session } } = await supabase.auth.getSession();
+      const accessToken = session?.access_token;
 
-    if (!accessToken) {
-      return toast.error("Authentication error. Please log in again.");
-    }
-
-    const response = await axios.post(
-      "https://agi-backend.onrender.com/api/users/withdrawal-request",
-      {
-        amount: parseFloat(withdrawalData.amount),
-        method: withdrawalData.paymentMethod,
-        recipientDetails: withdrawalData.recipientDetails,
-        referenceNumber: withdrawalData.referenceNumber,
-        fullName: withdrawalData.fullName
-      },
-      {
-        headers: { Authorization: `Bearer ${accessToken}` }
+      if (!accessToken) {
+        return toast.error("Authentication error. Please log in again.");
       }
-    );
 
-    toast.success(response.data.message);
+      // https://agi-backend.onrender.com
 
-    // Reset form
-    setWithdrawalData({
-      fullName: '',
-      amount: '',
-      paymentMethod: '',
-      recipientDetails: '',
-      referenceNumber: ''
-    });
 
-  } catch (error) {
-    console.error(error);
+      const response = await axios.post(
+        "http://localhost:3001/api/users/withdrawal-request",
+        {
+          amount: parseFloat(withdrawalData.amount),
+          method: withdrawalData.paymentMethod,
+          recipientDetails: withdrawalData.recipientDetails,
+          referenceNumber: withdrawalData.referenceNumber,
+          fullName: withdrawalData.fullName
+        },
+        {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        }
+      );
 
-    if (error.response && error.response.status === 403) {
-      toast.error(error.response.data.message || "Insufficient funds for withdrawal");
-    } else {
-      toast.error("Failed to submit withdrawal request");
+      toast.success(response.data.message);
+
+      // Reset form
+      setWithdrawalData({
+        fullName: '',
+        amount: '',
+        paymentMethod: '',
+        recipientDetails: '',
+        referenceNumber: ''
+      });
+
+    } catch (error) {
+      console.error(error);
+
+      if (error.response && error.response.status === 403) {
+        // Handle referral restriction message
+        if (error.response.data.message && 
+            error.response.data.message.includes('refer')) {
+          toast.error(
+            <div>
+              <p className="font-semibold">Referral Required</p>
+              <p className="text-sm">{error.response.data.message}</p>
+            </div>, 
+            { duration: 5000 }
+          );
+        } else {
+          toast.error(error.response.data.message || "Insufficient funds for withdrawal");
+        }
+      } else if (error.response && error.response.status === 400) {
+        toast.error(error.response.data.error || "Missing required information");
+      } else {
+        toast.error("Failed to submit withdrawal request. Please try again.");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
-
-
-
-
-
-
+  };
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    // You can add a toast notification here
-    alert('Copied to clipboard!');
+    toast.success('Copied to clipboard!');
   };
 
   const formatCurrency = (amount) => {
@@ -164,6 +171,20 @@ const Transactions = () => {
 
                 <h2 className="text-xl font-bold text-gray-900 mb-2">Withdraw Funds</h2>
                 <p className="text-gray-600 mb-6">Enter your details to withdraw to your preferred payment method</p>
+
+                {/* IMPORTANT: Add referral requirement notice */}
+                <div className="mb-6 p-4 bg-yellow-50 rounded-xl border border-yellow-200 max-w-2xl mx-auto">
+                  <h3 className="font-semibold text-yellow-800 mb-2 flex items-center justify-center text-sm">
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Withdrawal Eligibility
+                  </h3>
+                  <p className="text-xs text-yellow-700">
+                    You must refer at least one person before you can withdraw funds. 
+                    Share your referral code with friends to unlock withdrawals.
+                  </p>
+                </div>
 
                 <form onSubmit={handleWithdrawalSubmit}>
                   {/* Grid Layout for Form Fields */}
@@ -267,13 +288,13 @@ const Transactions = () => {
                           value={withdrawalData.amount}
                           onChange={handleWithdrawalChange}
                           required
-                          min="165"
+                          min="300"
                           step="0.01"
                           className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50"
                           placeholder="0.00"
                         />
                       </div>
-                      <p className="text-sm text-gray-500 mt-2 text-center">Minimum: {formatCurrency(165)}</p>
+                      <p className="text-sm text-gray-500 mt-2 text-center">Minimum: {formatCurrency(300)}</p>
                     </div>
                   </div>
 
@@ -305,6 +326,10 @@ const Transactions = () => {
                   <ul className="text-xs text-blue-800 space-y-2 text-left">
                     <li className="flex items-start">
                       <span className="text-blue-600 mr-2">•</span>
+                      Must have referred at least one person
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-600 mr-2">•</span>
                       Withdrawals processed within 24-48 hours
                     </li>
                     <li className="flex items-start">
@@ -320,8 +345,8 @@ const Transactions = () => {
               </div>
             )}
 
-            {/* Top Up Tab */}
-            {activeTab === 'topup' && (
+            {/* Top Up Tab remains the same */}
+              {activeTab === 'topup' && (
               <div className="text-center">
                 {/* Icon */}
                 <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -415,6 +440,7 @@ const Transactions = () => {
           </div>
         </div>
       </div>
+      <Toaster position="top-center" />
     </div>
   );
 };
