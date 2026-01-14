@@ -48,12 +48,13 @@ const Dashboard = () => {
 
       setLoading(true);
 
+
       const profileResponse = await axios.get(`https://agi-backend.onrender.com/api/users/profile`, {
         headers: { Authorization: `Bearer ${accessToken}` }
       });
 
       const result = profileResponse.data;
-      const totalAmount = result.profile.wallet + result.profile.withdrawable_commission;
+      const totalAmount = result.profile.wallet ;
       setTotalAmount(totalAmount);
 
       if (profileResponse.status === 200) {
@@ -145,7 +146,7 @@ const Dashboard = () => {
           </div>
 
           <p className='text-purple-100 text-sm'>
-            Earned from completing daily tasks
+            Earned from first time sign up completing daily tasks
           </p>
         </div>
       </div>
