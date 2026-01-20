@@ -111,7 +111,7 @@ const Sidebar = () => {
           </button>
         </div>
 
-        <div className='mt-5 mb-5 text-sm'> Join Asos Global Telegram <a href="https://t.me/yourchannel" target='_blank' className='text-blue-500'>@yourchannel</a></div>
+        <div className='mt-5 mb-5 text-sm'> Join Asos Global Telegram <a href="https://t.me/+n5ivbW-rzmE2YTBk" target='_blank' className='text-blue-500 font-bold'>@asosglobal</a></div>
 
         {/* Menu Items */}
         <ul className='md:mt-10'>
