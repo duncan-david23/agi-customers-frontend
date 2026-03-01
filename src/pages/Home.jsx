@@ -30,7 +30,7 @@ const Home = () => {
   const investmentPlans = [
     {
       name: 'Merger Arbitration',
-      range: '₵700 - ₵6,500',
+      range: '₵500 - ₵6,500',
       profit: '3% Daily Profit',
       color: 'from-blue-500 to-cyan-500',
       description: 'Stable investment with consistent daily returns'
@@ -219,12 +219,12 @@ const Home = () => {
               <div className="space-y-4">
                 <div className="flex justify-between items-center p-4 bg-gray-100/80 rounded-xl">
                   <span className="text-gray-700">Wallet Balance</span>
-                  <span className="text-green-600 font-bold">₵700.00</span>
+                  <span className="text-green-600 font-bold">₵500.00</span>
                 </div>
                 
                 <div className="flex justify-between items-center p-4 bg-gray-100/80 rounded-xl">
                   <span className="text-gray-700">Today's Profit</span>
-                  <span className="text-cyan-600 font-bold">₵21.00</span>
+                  <span className="text-cyan-600 font-bold">₵15.00</span>
                 </div>
                 
                 <div className="flex justify-between items-center p-4 bg-gray-100/80 rounded-xl">
@@ -256,7 +256,7 @@ const Home = () => {
               }}
               className="absolute -top-4 -right-4 bg-gradient-to-r from-green-500 to-emerald-500 p-4 rounded-xl shadow-2xl text-white"
             >
-              <div className="text-sm">+₵21.00</div>
+              <div className="text-sm">+₵15.00</div>
               <div className="text-xs opacity-90">Daily Profit</div>
             </motion.div>
             
@@ -397,7 +397,7 @@ const Home = () => {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between text-gray-700">
                   <span>Minimum Deposit:</span>
-                  <span className="font-semibold text-gray-900">₵700</span>
+                  <span className="font-semibold text-gray-900">₵500</span>
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span>Minimum Withdrawal:</span>
@@ -405,7 +405,7 @@ const Home = () => {
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span>Withdrawal Fee:</span>
-                  <span className="font-semibold text-gray-900">14%</span>
+                  <span className="font-semibold text-gray-900">0%</span>
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span>Withdrawal Day:</span>
