@@ -61,6 +61,8 @@ const Sidebar = () => {
     };
 
 
+  const telegramMessage = "https://t.me/Nicole_Asos?text=Hello%20Nichole%20ASOS%2C%20I%20need%20assistance"
+
   return (
     <>
       {/* Mobile Toggle Button - Only shows when sidebar is closed */}
@@ -111,7 +113,7 @@ const Sidebar = () => {
           </button>
         </div>
 
-        <div className='mt-5 mb-5 text-sm'> Join Asos Global Telegram <a href="https://t.me/Nicole_Asos" target='_blank' className='text-blue-500 font-bold'>@asosglobal</a></div>
+        <div className='mt-5 mb-5 text-sm'>  For enquiries let's chat <a href={telegramMessage} target='_blank' className='text-blue-500 font-bold'>Nicole Asos CS</a></div>
 
         {/* Menu Items */}
         <ul className='md:mt-10'>
