@@ -30,14 +30,14 @@ const Home = () => {
   const investmentPlans = [
     {
       name: 'Merger Arbitration',
-      range: '₵500 - ₵6,500',
+      range: '₵150 - ₵250',
       profit: '3% Daily Profit',
       color: 'from-blue-500 to-cyan-500',
       description: 'Stable investment with consistent daily returns'
     },
     {
       name: 'Triangular Arbitration',
-      range: '₵7,000 - ₵25,000',
+      range: '₵250 - ₵350',
       profit: '3% Daily Profit',
       color: 'from-green-500 to-emerald-600',
       popular: true,
@@ -45,14 +45,14 @@ const Home = () => {
     },
     {
       name: 'Forex Arbitrage',
-      range: '₵30,000+',
+      range: '₵350 - ₵450',
       profit: '3% Daily Profit',
       color: 'from-purple-500 to-indigo-600',
       description: 'Professional forex arbitrage opportunities'
     },
     {
       name: 'ASOS Grand Package',
-      range: '₵50,000 - ₵500,000',
+      range: '₵550 and above',
       profit: '95% Monthly Profit',
       color: 'from-orange-500 to-red-600',
       featured: true,
@@ -166,7 +166,7 @@ const Home = () => {
                 className="border border-gray-300 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all"
                 onClick={()=> navigate('/register')}
               >
-                Get ₵56 Bonus
+                Get ₵27 Bonus
               </motion.button>
             </div>
 
@@ -228,15 +228,15 @@ const Home = () => {
                 </div>
                 
                 <div className="flex justify-between items-center p-4 bg-gray-100/80 rounded-xl">
-                  <span className="text-gray-700">Referral Earnings</span>
-                  <span className="text-blue-600 font-bold">₵56.00</span>
+                  <span className="text-gray-700">Welcome Bonus</span>
+                  <span className="text-blue-600 font-bold">₵27.00</span>
                 </div>
                 
                 <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 p-4 rounded-xl border border-blue-300">
                   <div className="text-sm text-gray-700">Weekly Withdrawal</div>
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-sm text-gray-600">Next: Thursday</span>
-                    <span className="text-sm font-semibold text-gray-800">Fee: 14%</span>
+                    <span className="text-sm font-semibold text-gray-800">Fee: 0%</span>
                   </div>
                 </div>
               </div>
@@ -401,7 +401,7 @@ const Home = () => {
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span>Minimum Withdrawal:</span>
-                  <span className="font-semibold text-gray-900">₵165</span>
+                  <span className="font-semibold text-gray-900">₵80</span>
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span>Withdrawal Fee:</span>
@@ -432,7 +432,7 @@ const Home = () => {
                   <div className="text-sm text-gray-600">Daily team trading bonus</div>
                 </div> */}
                 <div className="bg-gray-100/80 rounded-xl p-4">
-                  <div className="text-2xl font-bold text-green-600">₵56</div>
+                  <div className="text-2xl font-bold text-green-600">₵27</div>
                   <div className="text-sm text-gray-600">Welcome bonus after registration</div>
                 </div>
               </div>
