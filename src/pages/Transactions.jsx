@@ -287,13 +287,13 @@ const Transactions = () => {
                           value={withdrawalData.amount}
                           onChange={handleWithdrawalChange}
                           required
-                          min="300"
+                          min="80"
                           step="0.01"
                           className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50"
                           placeholder="0.00"
                         />
                       </div>
-                      <p className="text-sm text-gray-500 mt-2 text-center">Minimum: {formatCurrency(300)}</p>
+                      <p className="text-sm text-gray-500 mt-2 text-center">Minimum: {formatCurrency(80)}</p>
                     </div>
                   </div>
 
