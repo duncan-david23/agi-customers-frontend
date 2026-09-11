@@ -291,10 +291,10 @@ const Register = () => {
               >
                 <div className="flex items-center justify-center space-x-2 text-green-700">
                   <CurrencyDollarIcon className="w-5 h-5" />
-                  <span className="font-semibold">₵56 Welcome Bonus!</span>
+                  <span className="font-semibold">₵27 Welcome Bonus!</span>
                 </div>
                 <p className="text-sm text-gray-600 mt-1">
-                  Complete registration and get ₵56 bonus instantly
+                  Complete registration and get ₵27 bonus instantly
                 </p>
               </motion.div>
             </form>
