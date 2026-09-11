@@ -458,7 +458,7 @@ const Home = () => {
             Ready to Start Your <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Wealth Journey</span>?
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Join ASOS Global today and get ₵56 welcome bonus.
+            Join ASOS Global today and get ₵27 welcome bonus.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <motion.button
